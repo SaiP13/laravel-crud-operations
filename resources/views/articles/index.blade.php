@@ -1,8 +1,12 @@
-@extends('articles.layout')
-
-
+@extends('layouts.app')
+{{-- @extends('articles.layout') --}}
+@section('title','home')  
 @section('content')
-   
+   {{-- <div style="margin-left: 10%;margin-right:10%;margin-top:5%;color:rgb(243, 17, 17)" > --}}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-2">
+                <div class="panel panel-default">
     <div class="row" style="margin-bottom: 20px">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
@@ -28,9 +32,10 @@
             <th>Title</th>
             <th>Description</th>
             <th>Date</th>
-            <th width="280px">Action</th>
+            <th width="210px">Action</th>
         </tr>
     @foreach ($articles as $article)
+    
     <tr>
         <td>{{ ++$i }}</td>
         <td>{{ ucfirst($article->title)}}</td>
@@ -47,8 +52,9 @@
     @endforeach
     </table>
 
-    <div style="float:center">
+    <div style="float:left">
         {!! $articles->links() !!}
     </div>
-    
+   </div>
+            </div></div></div>
 @endsection

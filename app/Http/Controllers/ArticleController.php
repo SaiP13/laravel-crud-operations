@@ -18,7 +18,7 @@ class ArticleController extends Controller
         $articles = ArticleModel::latest()->paginate(4);
 
         return view('articles.index',compact('articles'))
-            ->with('i', (request()->input('page', 1) - 1) * 4);
+           ->with('i', (request()->input('page', 1) - 1) * 4);
     }
 
     /**
