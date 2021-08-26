@@ -121,6 +121,8 @@
                 })
 			    return false;
                 //alert('Name should have  value')
+            } else{
+                return true;
             }
         }); 
          
