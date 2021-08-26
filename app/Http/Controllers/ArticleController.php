@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\ArticleModel;
 use Session;
+use Validator;
 
 class ArticleController extends Controller
 {
@@ -40,9 +41,18 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
+            'title' => 'required|unique:articles',
             'body' => 'required',
         ]);
+        // $validate_rules = array(  
+        //     "title" => 'required',
+        //     "body" => 'required',
+        // );
+        // $messages = [
+        //     'required' => 'The :attribute field is must',
+        // ];
+
+        // $validator = Validator::make($request->all(), $validate_rules, $messages);
 
         ArticleModel::create($request->all());
 
@@ -83,6 +93,9 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //start
+       
+        //end
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',

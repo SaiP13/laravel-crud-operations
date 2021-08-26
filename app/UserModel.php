@@ -10,7 +10,7 @@ class UserModel extends Model
     
     
     public static function getUserData(){
-        //return DB::table('users')->select('*')->get();
+        //return DB::table('users')->select('*')->get()->toArray();
         return DB::table('users')->select('*')->paginate(2);
     }
     public static function getUserDetails($id){

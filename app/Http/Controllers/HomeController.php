@@ -29,7 +29,10 @@ class HomeController extends Controller
     public function users()
     {
         $data['userData'] = UserModel::getUserData();
-        //$data['userData'] = DB::table('users')->paginate(2);
+        //echo '<pre>';
+        //echo $data->toJson();
+        //echo(json_encode($data)); exit();
+        $data['userData'] = DB::table('users')->paginate(2);
 
         return view('users')->with($data);
     }
@@ -39,6 +42,21 @@ class HomeController extends Controller
     }
     public function addNewUser(Request $request)
     {
+        
+        // echo "<pre>";
+        // print_r($request->all());
+        // $jsonVar = json_encode($request->all());
+        // echo 'Json: '.$jsonVar.'<br>';
+        // echo var_dump($jsonVar);
+        // echo $request['name'].'<br>'; 
+        // echo $request->name.'<br>'; 
+        // echo "Input method :".$request->input('email').'<br>'; 
+        // echo 'Query :'.$request->query('email').'<br>'; 
+        // echo 'Url :'.$request->url().'<br>'; 
+        // echo 'IP'.$request->ip().'<br>'; 
+        // echo 'Method'.$request->method();
+        // exit();
+        
         $this->validate($request, [
             'name' => 'required|min:3',
             'email' => 'required|email|max:255|unique:users',

@@ -23,9 +23,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php $i=0; @endphp
                             @foreach ($userData as $item)
+                            @php $i++; @endphp
                             <tr>
-                                <td>{{ $item->id }}</td>
+                                <td>{{ $i }}</td>
                                 <td>{{ ucfirst($item->name) }}</td>
                                 <td>{{ $item->email }}</td>
                                 <td>{{ date('d-m-Y h:i a' ,strtotime($item->created_at)) }}</td>
