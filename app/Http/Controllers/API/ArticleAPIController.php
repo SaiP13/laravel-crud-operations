@@ -1,33 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API; 
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\APIBaseController as APIBaseController;
-use App\ArticleModel as Article;
+use App\ArticleModel;
 use Validator;
 
-class ArticleAPIController extends Controller
+class ArticleAPIController extends APIBaseController 
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __contruct()
+    {
+
+    }
     public function index()
     {
-        $articles = Article::all();
-        return $this->sendResponse($articles->toArray(), 'Articles are displayed successfully.');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //$articles = ArticleModel::all();
+        //1) using another class    //return $this->sendResponse($articles->toArray(), 'Articles are displayed successfully.');
+        //2) direct -return         //return $articles;
+        
+        //3) using exception and json
+        try{
+            $articles = ArticleModel::all();
+            return response()->json(['status'=>'Success','message'=>'List of Artcles','data'=>$articles],200);
+        } 
+        catch(\Exception $e){
+            return response()->json(['status'=>500,'message'=>'Somthing went wrong'],500);
+        }
     }
 
     /**
@@ -38,7 +42,28 @@ class ArticleAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $rules = array(
+            'title' => 'required',
+            'body' => 'required'
+         );
+
+        $validator = Validator::make($input, $rules);
+        if($validator->fails()) {
+            $error_reasons = $validator->messages()->all();
+            //$error_reasons = $validator->messages()->first();
+            //$error_reasons = $validator->messages();
+            return response()->json(['status'=>'error','message'=>'enter mandatory fields','errors'=>$error_reasons],500);
+            //return prepareResponse($this->error_reason,$this->success_message,$this->data);
+        } else{
+            try{
+                ArticleModel::create($input);
+                return response()->json(['status'=>'Success','message'=>'New Artcile Created','data'=>$input],200);
+            } 
+            catch(\Exception $e){
+                return response()->json(['status'=>500,'message'=>'Somthing went wrong'],500);
+            }
+        }
     }
 
     /**
@@ -49,18 +74,14 @@ class ArticleAPIController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        
+            $data = ArticleModel::find($id);
+            if($data != "")
+            {
+                return response()->json(['status'=>'Success','message'=>'Article Deatils','data'=>$data],200);
+            } else {
+                return response()->json(['status'=>'error','message'=>'Article not found'],404);
+            }
     }
 
     /**
@@ -72,7 +93,31 @@ class ArticleAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = ArticleModel::find($id);
+        
+        if($article != ""){
+            $input = $request->all();
+            $rules = array(
+                'title' => 'required',
+                'body' => 'required'
+            );
+
+            $validator = Validator::make($input, $rules);
+            
+            if($validator->fails()) {
+                $error_reasons = $validator->messages()->all();
+                return response()->json(['status'=>'error','message'=>'enter mandatory fields','errors'=>$error_reasons],500);
+            } else{
+                $article->title = $request['title'];
+                $article->body = $request['body'];
+                $article->save();
+                return response()->json(['status'=>'success','message'=>' Artcile Successfully Updated','data'=>$input],200);
+            } 
+        } 
+        else 
+        {
+            return response()->json(['status'=>'error','message'=>'Article not found'],404);
+        }
     }
 
     /**
@@ -83,6 +128,12 @@ class ArticleAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = ArticleModel::find($id);
+        if($data != ""){
+            $data->delete();
+            return response()->json(['status'=>'Success','message'=>'Article Sucessfully Deleted'],200);
+        } else {
+            return response()->json(['status'=>'error','message'=>'Article not found'],404);
+        }
     }
 }
