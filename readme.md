@@ -3,7 +3,7 @@ First migrate tables then serve application.
   1) Login Authentication
   2) Sending Email
   3) Create, Edit and Delete
-  4) Flash Data
+  4) Flash Data (sweet alert)
   5) Form Validations
   6) Paginations
 Some Screenshots
